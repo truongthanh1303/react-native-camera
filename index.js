@@ -10,6 +10,7 @@ import {
   View,
   ViewPropTypes
 } from 'react-native';
+import BarcodeFinder from './barcode-finder';
 
 const CameraManager = NativeModules.CameraManager || NativeModules.CameraModule;
 const CAMERA_REF = 'camera';
@@ -116,7 +117,11 @@ export default class Camera extends Component {
     type: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number
-    ])
+    ]),
+    barcodeFinderVisible: PropTypes.bool,
+    barcodeFinderWidth: PropTypes.number,
+    barcodeFinderHeight: PropTypes.number,
+    barcodeFinderStyle: PropTypes.object
   };
 
   static defaultProps = {
@@ -134,6 +139,10 @@ export default class Camera extends Component {
     torchMode: CameraManager.TorchMode.off,
     mirrorImage: false,
     barCodeTypes: Object.values(CameraManager.BarCodeType),
+    barcodeFinderVisible: false,
+    barcodeFinderWidth: 200,
+    barcodeFinderHeight: 200,
+    barcodeFinderStyle: {borderColor: "rgba(255,255,255,0.6)", borderWidth: 1},
   };
 
   static checkDeviceAuthorizationStatus = CameraManager.checkDeviceAuthorizationStatus;
@@ -201,7 +210,27 @@ export default class Camera extends Component {
     const style = [styles.base, this.props.style];
     const nativeProps = convertNativeProps(this.props);
 
-    return <RCTCamera ref={CAMERA_REF} {...nativeProps} />;
+    // Should we show barcode finder, use in child or use default
+    var childs = null;
+    if(this.props.barcodeFinderVisible){
+        if(this.props.children !== undefined){
+        childs = React.Children.map(this.props.children,
+         (child) => React.cloneElement(child, {
+           style: this.props.barcodeFinderStyle,
+           width: this.props.barcodeFinderWidth,
+           height: this.props.barcodeFinderHeight
+         })
+        );
+      }
+      else {
+        childs = <BarcodeFinder style={this.props.barcodeFinderStyle} width={this.props.barcodeFinderWidth} height={this.props.barcodeFinderHeight} />
+      }
+    }
+
+    return (<View style={{flex:1}}>
+              <RCTCamera ref={CAMERA_REF} {...nativeProps} />
+              {childs}
+            </View>);
   }
 
   _onBarCodeRead = (data) => {

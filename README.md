@@ -223,7 +223,7 @@ Will call the specified method when a barcode is detected in the camera's view.
 
 Event contains `data` (the data in the barcode) and `bounds` (the rectangle which outlines the barcode.)
 
-The following barcode types can be recognised:
+The following barcode types can be recognised for iOS:
 
 - `aztec`
 - `code128`
@@ -244,6 +244,35 @@ The barcode type is provided in the `data` object.
 #### `barCodeTypes`
 
 An array of barcode types to search for. Defaults to all types listed above. No effect if `onBarCodeRead` is undefined.
+
+#### `barcodeFinderVisible`
+
+Displays an rectangle over the camera to show the area of barcode scanning. If this is used the actual area that is scanned in cropped to the rectangle. This can significantly increase the performance.
+
+Adjust size and style:
+`barcodeFinderWidth`,
+`barcodeFinderHeight`,
+`barcodeFinderStyle`
+
+  The default viewer style has borderColor and borderWidth.
+
+
+##### Make a custom barcode finder
+
+  1. make a copy of barcode-finder.js and place it in your project
+  2. add it to your project
+  3. add it as a child to the Camera
+```javascript
+<Camera>
+    <MyCustomBarcodeFinder />
+</Camera>
+```
+**NOTE:** The scan area is cropped and as long the first to <View> components remain intact it should show the correct size.
+```javascript
+<View style={[styles.container]}>
+    <View style={[styles.finder, this.getSizeStyles()]}>
+        { place your design here }
+```
 
 #### `flashMode`
 

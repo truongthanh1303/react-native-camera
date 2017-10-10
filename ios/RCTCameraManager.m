@@ -460,12 +460,13 @@ RCT_EXPORT_METHOD(hasFlash:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRej
       [self.session addOutput:metadataOutput];
       [metadataOutput setMetadataObjectTypes:self.barCodeTypes];
       self.metadataOutput = metadataOutput;
-      if (self.barcodeFinderVisible) {
-        double cameraViewWidth = [[UIScreen mainScreen] bounds].size.height;
-        double cameraViewHeight = [[UIScreen mainScreen] bounds].size.width;
-        CGRect scanLimit = CGRectMake((cameraViewHeight/2)-(self.barcodeFinderHeight/2),(cameraViewWidth/2)-(self.barcodeFinderWidth/2), self.barcodeFinderHeight, self.barcodeFinderWidth);
-        [self.previewLayer metadataOutputRectOfInterestForRect: scanLimit];
-      }
+        if (self.barcodeFinderVisible) {
+            double cameraViewWidth = [[UIScreen mainScreen] bounds].size.height;
+            double cameraViewHeight = [[UIScreen mainScreen] bounds].size.width;
+            CGRect scanLimit = CGRectMake((cameraViewHeight/2)-(self.barcodeFinderHeight/2),(cameraViewWidth/2)-(self.barcodeFinderWidth/2), self.barcodeFinderHeight, self.barcodeFinderWidth);
+            [self.previewLayer metadataOutputRectOfInterestForRect: scanLimit];
+        }
+
     }
 
     __weak RCTCameraManager *weakSelf = self;

@@ -59,6 +59,7 @@ function convertNativeProps(props) {
   return newProps;
 }
 
+
 export default class Camera extends Component {
 
   static constants = {
